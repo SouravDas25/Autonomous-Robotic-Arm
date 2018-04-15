@@ -1,0 +1,66 @@
+import processing.serial.*;
+
+public static char startByte = 1;
+public static char ackByte = 2;
+public static char ackBackByte = 3;
+
+class Talker extends Serial {
+  
+  Talker(PApplet instance,int baud,String portName)
+  {
+    super(instance,portName,baud);
+  }
+  
+  public boolean tryConnection()
+  {
+    int c = 0;
+    println("Waiting for connection...");
+    while(c != ackByte)
+    {
+      this.clear();
+      this.write(startByte);
+      delay(100);
+      if(this.available() > 0)
+      {
+        c = this.readChar();
+      }
+    }
+    println("Acknoledgement Received...");
+    this.write(ackBackByte);
+    return true;
+  }
+  
+  public boolean waitUntilConnect()
+  {
+    this.tryConnection();
+    this.clear();
+    return true;
+  }
+
+  public void printPortNames()
+  {
+    int i;
+    for(i=0;i<Serial.list().length;i++)
+    {
+      println(Serial.list()[i] + " : " + i);
+    }
+  }
+  
+  public int send(String msg)
+  {
+    int c = this.read();
+    while(c != ackByte)
+    {
+      if(this.available() > 0 ) c = this.read();
+    }
+    this.clear();
+    int i;
+    for(i=0;i<msg.length() ; i++ )
+    {
+      this.write(msg.charAt(i));
+    }
+    this.write('\n');
+    return i;
+  }
+
+}
