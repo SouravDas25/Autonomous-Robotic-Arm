@@ -25,10 +25,16 @@ class Point():
 
 class Canvas(object):
 
-    def __init__(self):
+    def __init__(self,type=0):
         self.xs = []
         self.ys = []
         self.zs = []
+        self.type = type
+        self.fig = plt.figure()
+        self.ax = self.fig.add_subplot(111, projection='3d')
+        self.ax.set_xlabel('X Label')
+        self.ax.set_ylabel('Y Label')
+        self.ax.set_zlabel('Z Label')
 
     def addLine(self,p1,p2):
         self.addPoint(p1)
@@ -45,13 +51,20 @@ class Canvas(object):
             self.zs.append(z)
         return True
 
-    def show(self):
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-        ax.plot3D(self.xs, self.ys, self.zs)
-        ax.set_xlabel('X Label')
-        ax.set_ylabel('Y Label')
-        ax.set_zlabel('Z Label')
+    def plot(self):
+        self.xs = np.array(self.xs)
+        self.ys = np.array(self.ys)
+        self.zs = np.array(self.zs)
+        if self.type == 0 :
+            self.ax.plot3D(self.xs, self.ys, self.zs)
+        else :
+            self.ax.scatter(self.xs, self.ys, self.zs)
+        self.xs = []
+        self.ys = []
+        self.zs = []
+        
 
+    def show(self):
+        self.plot()
         plt.show()
 

@@ -11,18 +11,20 @@ PImage src,dst;
 ArrayList<Contour> contours;
 ArrayList<Contour> polygons;
 
-void setup()
+PApplet appc;
+
+void initIP(PApplet app)
 {
-    size(1080, 720);
+    //size(1080, 720);
     src = loadImage(url);
     src.resize(1080,720);
     opencv = new OpenCV(this,src);
-    createGUI();
-    opencv.loadCascade(OpenCV.CASCADE_FRONTALFACE);  
+    //createGUI();
+    appc = app;
 }
 
 
-void draw()
+void loopIP()
 {
   src = loadImage(url);
   src.resize(1080,720);
@@ -36,12 +38,12 @@ void draw()
   
   
   
-  image(src, 0, 0);
+  appc.image(src, 0, 0);
   //image(dst, 0, 0);
   //image_icon.setIcon(src,1,GAlign.LEFT ,GAlign.TOP);
-  noFill();
-  strokeWeight(3);
-  stroke(0, 255, 0);
+  appc.noFill();
+  appc.strokeWeight(3);
+  appc.stroke(0, 255, 0);
   //cascadeDetector();
   detectContours();
 }

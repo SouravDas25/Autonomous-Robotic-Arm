@@ -1,41 +1,51 @@
+#include <ArduinoJson.h>
 
+
+
+const double segment1_length = 62;
+const double segment2_length = 62;
+const double segment3_length = 62;
 
 class Input {
 
     public :
-    int servoID,servoValue,prevID;
+    float s0_angle,s1_angle,s2_angle,s3_angle;
 
-    Input():servoID(-1),servoValue(-1),prevID(-1){};
+    Input():s0_angle(-1),s1_angle(-1),s2_angle(-1),s3_angle(-1){};
 
-    bool parseMsg(String & msg) // 1 : 180
+    bool parseCoords(String& msg)
     {
-        //Serial.println(msg);
-        int n = msg.indexOf(':');
-        //Serial.println(n);
-        String ID = msg.substring(0,n);
-        String Val = msg.substring(n+1,msg.length());
-        //Serial.println(ID + " " + Val);
-        this->servoID = ID.toInt();
-        this->servoValue = Val.toInt();
-        //Serial.println(print());
+        DynamicJsonBuffer jsonBuffer;
+        JsonObject& root = jsonBuffer.parseObject(msg);
+        //root.printTo(Serial);
+        setAngle(root);
         return true;
     }
 
-    void covertCoords(int x,int y , int z)
+    void setAngle(const JsonObject& root)
     {
-      
-    }
-
-    bool isValid()
-    {
-        if(servoID != -1 && servoValue != -1) return true;
-        return false;
+      if( root.containsKey("s0") )
+      {
+          s0_angle = root["s0"];
+      }
+      if( root.containsKey("s1") )
+      {
+          s1_angle = root["s1"];
+      }
+      if( root.containsKey("s2") )
+      {
+          s2_angle = root["s2"];
+      }
+      if( root.containsKey("s3") )
+      {
+          s3_angle = root["s3"];
+      }
     }
 
     String print()
     {
         String  s = "" ;
-        s += "Forward On  Motor : " + String(this->servoID) + " => "+ this->servoValue;
+        s += String(" 0 : ") + s0_angle + ", 1 : " + s1_angle + ", 2 : " + s2_angle;
         return s;
     }
 

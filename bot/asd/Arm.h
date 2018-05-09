@@ -2,6 +2,12 @@
 #include "input.h"
 
 #define no_of_servos 4
+#define notNan(x) x == x
+
+#define servo0Pin 3
+#define servo1Pin 5
+#define servo2Pin 9
+#define servo3Pin 10
 
 class Arm 
 {
@@ -15,18 +21,24 @@ class Arm
     void execute(String msg)
     {
         static unsigned long t = millis() ;
-        inp.parseMsg(msg);
-        if(inp.prevID != inp.servoID || t - millis() > 500 )
+        inp.parseCoords(msg);
+        if( t - millis() > 500 )
         {
-            write(inp.servoID,inp.servoValue);
-            inp.prevID = inp.servoID;
-            t = millis();
+          if( notNan(inp.s0_angle) && inp.s0_angle >= 0) write(0,abs(inp.s0_angle));
+          if( notNan(inp.s1_angle) && inp.s1_angle >= 0) write(1,abs(inp.s1_angle));
+          if( notNan(inp.s2_angle) && inp.s2_angle >= 0) write(2,abs(inp.s2_angle));
+          
+            
+            
+          if( notNan(inp.s3_angle) && inp.s3_angle >= 0) write(3,abs(inp.s3_angle));
+          t = millis();
         }
     }
 
     void write(int i,int value)
     {
-        s[i].write(value);
+        s[i].write((int)abs(value));
+        delay(100);
     }
 
     void writeAll(int value)
@@ -61,13 +73,26 @@ class Arm
         }
     }
 
+    void refresh()
+    {
+      int diff = abs(( 180 - inp.s2_angle) - inp.s1_angle) ;
+      if( diff < 45)
+      {
+        write(2,abs(inp.s2_angle + 45 - diff ));
+      }
+    }
+
     void init()
     {
-        s[0].attach(3);
-        s[1].attach(5);
-        s[2].attach(6);
-        s[3].attach(9);
-        writeAll(0);
+        pinMode(servo0Pin,OUTPUT);
+        pinMode(servo1Pin,OUTPUT);
+        pinMode(servo2Pin,OUTPUT);
+        pinMode(servo3Pin,OUTPUT);
+        s[0].attach(servo0Pin);
+        s[1].attach(servo1Pin);
+        s[2].attach(servo2Pin);
+        s[3].attach(servo3Pin);
+        writeAll(90);
         delay(10);
     }
 

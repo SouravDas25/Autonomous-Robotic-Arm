@@ -1,70 +1,90 @@
-import controlP5.*;
+import g4p_controls.*;
 
-
-ControlP5 cp5;
 Talker talker;  // Create object from Serial class
+Arm arm;
 public String val;     // Data received from the serial port
 int Servo1 = 0;
 
 void setup()
 {
   size(700,400);
-  talker = new Talker(this,19200,"COM8");
-  //talker.waitUntilConnect();
-  cp5 = new ControlP5(this);
-  cp5.addSlider("Servo0")
-     .setPosition(100,100+26*0)
-     .setRange(0,180)
-     .setSize(400,25);
-  cp5.addSlider("Servo1")
-     .setPosition(100,100+26*1)
-     .setRange(0,180)
-     .setSize(400,25);
-  cp5.addSlider("Servo2")
-     .setPosition(100,100+26*2)
-     .setRange(0,180)
-     .setSize(400,25);
-  cp5.addSlider("Servo3")
-     .setPosition(100,100+26*3)
-     .setRange(0,180)
-     .setSize(400,25);
-
-}
+  talker = new Talker(this,28800,"COM8");
+  talker.waitUntilConnect();
+  arm = new Arm();
+  createGUI();
+  //initIP();
+} 
 
 void draw()
 {
   background(128);
-  /*String s = "Hello" + i++;
-  talker.send(s);
-  println("Hello SEND " + i);*/
   if( talker.available() > 0) 
   {
     val = talker.readStringUntil('\n');
-    print(val);
+    if(val != null )
+    print("Received : ",val);
   }
-  /*delay(1000);*/
 }
 
-void Servo0(float theDegree) {
-  String s = "0:" + (int)theDegree;
-  talker.send(s);
-  //println(s);
+void handOverCoords(Point p)
+{
+  //Home();
+  float x = (float)p.x+50;
+  float y = (float)p.y+50;
+  int z = 20;
+  /*float theta = radians(17.5);
+  x = x*cos(theta)+y*sin(theta);
+  y = -x*sin(theta)+y*cos(theta);*/
+  x = abs(893 - x)  ;
+  y = (y > 470 )  ? ( 560 - y) : ( 470 - y) ;
+  float theta = (float)Math.atan(y/x);
+  x = x/3;
+  y = x * tan(theta);
+  println(x,y,z);
+  //arm.setCoordinate((int)x,(int)y,z);
 }
 
-void Servo1(float theDegree) {
-  String s = "1:" + (int)theDegree;
-  talker.send(s);
-  //println(s);
-}
+int gx=50,gy=50,gz=50,diff = 5;
+boolean gp = true;
 
-void Servo2(float theDegree) {
-  String s = "2:" + (int)theDegree;
-  talker.send(s);
-  //println(s);
-}
-
-void Servo3(float theDegree) {
-  String s = "3:" + (int)theDegree;
-  talker.send(s);
-  //println(s);
+void keyPressed() {
+    if (key == 'w') {
+      gx+=diff;
+      arm.setCoordinate(gx,gy,gz);
+    } 
+    if (key == 's') {
+      gx-=diff;
+      arm.setCoordinate(gx,gy,gz);
+    } 
+    if (key == 'a') {
+      gy+=diff;
+      arm.setCoordinate(gx,gy,gz);
+    } 
+    if (key == 'd') {
+      gy-=diff;
+      arm.setCoordinate(gx,gy,gz);
+    } 
+    if (key == 'e' ) {
+      gz+=diff;
+      arm.setCoordinate(gx,gy,gz);
+    } 
+    if (key == 'q'  ) {
+      gz-=diff;
+      arm.setCoordinate(gx,gy,gz);
+    } 
+    if ( key == 'g' ) {
+      if(gp)
+      {
+        arm.closeGripper();
+      }
+      else 
+      {
+        arm.openGripper();
+      }
+      gp = !gp;
+    }
+    
+    //println("NOW Cord" , gx,gy,gz);
+    //displayCoords();
+    //displayAngles();
 }

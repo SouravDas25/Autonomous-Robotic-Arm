@@ -1,0 +1,28 @@
+ import g4p_controls.*;
+
+Talker talker;  // Create object from Serial class
+Arm arm;
+public String val;     // Data received from the serial port
+int Servo1 = 0;
+
+void setup()
+{
+  size(1080, 720);
+  initIP();
+  talker = new Talker(this,19200,"COM8");
+  talker.waitUntilConnect();
+  arm = new Arm();
+  createGUI();
+} 
+
+void draw()
+{
+  //background(128);
+  loopIP();
+  if( talker.available() > 0) 
+  {
+    val = talker.readStringUntil('\n');
+    if(val != null )
+    print("Received : ",val);
+  }
+}

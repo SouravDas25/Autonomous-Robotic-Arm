@@ -53,15 +53,22 @@ class Talker extends Serial {
     clear();
   }
   
+  public int lastSendTIme = millis();
+  
   public int send(String msg)
   {
-    int i;
-    for(i=0;i<msg.length() ; i++ )
+    if( millis() - lastSendTIme > 500 )
     {
-      this.write(msg.charAt(i));
+      int i;
+      for(i=0;i<msg.length() ; i++ )
+      {
+        this.write(msg.charAt(i));
+      }
+      this.write('\n');
+      lastSendTIme = millis();
+      return i;
     }
-    this.write('\n');
-    return i;
+    return 0;
   }
 
 }
