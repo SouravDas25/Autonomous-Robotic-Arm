@@ -1,10 +1,12 @@
 import gab.opencv.*;
 import g4p_controls.*;
 import java.awt.Rectangle;
+import java.util.LinkedList;
+import java.util.Queue;
 
 OpenCV opencv;
 
-String url="http://192.168.0.2:8080/shot.jpg";
+String url="http://192.168.0.3:8080/shot.jpg";
 //String url = "face.jpg";
 PImage src,dst;
 
@@ -58,6 +60,17 @@ void cascadeDetector()
   }
 }
 
+public Queue<Point> pointQueue = new LinkedList();
+public boolean isActive = false;
+public Point currentPoint = null;
+
+void runThreadJob()
+{
+  if(currentPoint != null )handOverCoords(currentPoint);
+  isActive = false;
+  currentPoint = null;
+}
+
 void detectContours()
 {
   contours = opencv.findContours();
@@ -73,8 +86,23 @@ void detectContours()
       contour.draw();
       appc.rect(r.x,r.y,r.width,r.height);
       Point p = calCenter(r);
-      handOverCoords(p);
       println("Found Object " , p);
+      if( pointQueue.size() > 10 )
+      {
+        Point rp = pointQueue.remove();
+        if( Math.abs(rp.x - p.x) < 10 && Math.abs(rp.y - p.y) < 10 )
+        {
+          pointQueue.clear();
+          currentPoint = p;
+          if(isActive == false)
+          {
+            isActive = true;
+            thread("runThreadJob");
+          }
+          
+        }
+      }
+      pointQueue.add(p);
       //break;
     }
     //double area = OpenCV.contourArea(contour);
@@ -91,19 +119,15 @@ void detectContours()
 boolean detectObject(Rectangle  r,Contour contour)
 {
   ArrayList<PVector> pts = contour.getPoints();
+  Point p = calCenter(r);
   boolean det = true;
-  det = det && (r.x < 800 && r.x > 268 ) && (r.y < 700 && r.y > 100 );
+  det = det && (p.x < 748 && p.x > 177 ) && (p.y < 390 && p.y > 0 );
   if( det == false ) return false;
   det = det && abs(pts.get(0).x - pts.get(contour.numPoints()-1).x ) < 10 && abs(pts.get(0).y - pts.get(contour.numPoints()-1).y ) < 10 ; 
   if(  det == false ) return false;
-  //det = det && (abs(r.width - 118) < 25 || abs(r.width - 45) < 25) ;//&& abs(r.width/r.height) < 1.2 && abs(r.width/r.height) > 0.8;
-  //if(  det == false) return false;
-  Point p = calCenter(r);
-  color c = get((int)p.x, (int)p.y);
-  println("color",c,color(0,0,0));
-  det = det && c == color(0,0,0);
-  if( det == false) return false;
-  //println(pts.get(0),pts.get(contour.numPoints()-1));
+  int area = r.width * r.height;
+  det = det && ( area < 14300 && area > 3180) ;
+  if(  det == false) return false;
   return true;
 }
 

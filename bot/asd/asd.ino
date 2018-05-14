@@ -9,6 +9,7 @@ Talker talker;
 void setup() {
   talker.begin(28800);
   arm.init();
+  arm.restPos();
   if( talker.connect() ) talker.send("Connected From Board.");
 }
 

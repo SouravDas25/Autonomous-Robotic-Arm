@@ -12,7 +12,7 @@ void setup()
   talker.waitUntilConnect();
   arm = new Arm();
   createGUI();
-  //initIP();
+  initIP();
 } 
 
 void draw()
@@ -29,19 +29,21 @@ void draw()
 void handOverCoords(Point p)
 {
   //Home();
-  float x = (float)p.x+50;
-  float y = (float)p.y+50;
-  int z = 20;
+  float x = (float)p.x+70;
+  float y = (p.y < 250) ? (float)p.y+70 : (float)p.y - (float)(p.y-250)/2 ;
+  int z = 70;
   /*float theta = radians(17.5);
   x = x*cos(theta)+y*sin(theta);
   y = -x*sin(theta)+y*cos(theta);*/
   x = abs(893 - x)  ;
-  y = (y > 470 )  ? ( 560 - y) : ( 470 - y) ;
-  float theta = (float)Math.atan(y/x);
+  y = 470 - y ;
+  float theta = (float)Math.atan2(y,x);
   x = x/3;
   y = x * tan(theta);
   println(x,y,z);
-  //arm.setCoordinate((int)x,(int)y,z);
+  //arm.setCoordinate((int)x,(int)y,50);
+  //delay(5000);
+  IPpick((int)x,(int)y);
 }
 
 int gx=50,gy=50,gz=50,diff = 5;

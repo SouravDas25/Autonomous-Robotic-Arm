@@ -83,7 +83,7 @@ public void button2_click1(GButton source, GEvent event) { //_CODE_:button2:4292
 
 synchronized public void win_draw1(PApplet appc, GWinData data) { //_CODE_:window1:887982:
   appc.background(230);
-  //loopIP(appc);
+  loopIP(appc);
 } //_CODE_:window1:887982:
 
 public void button3_click1(GButton source, GEvent event) { //_CODE_:button3:384003:
@@ -147,7 +147,7 @@ public void createGUI(){
   button2 = new GButton(this, 130, 111, 80, 30);
   button2.setText("Move");
   button2.addEventHandler(this, "button2_click1");
-  /*window1 = GWindow.getWindow(this, "Window title", 0, 0, 1080, 720, JAVA2D);
+  window1 = GWindow.getWindow(this, "Window title", 0, 0, 1080, 720, JAVA2D);
   window1.noLoop();
   window1.setActionOnClose(G4P.CLOSE_WINDOW);
   window1.addDrawHandler(this, "win_draw1");
@@ -155,7 +155,7 @@ public void createGUI(){
   button3.setText("Save");
   button3.setTextBold();
   button3.addEventHandler(this, "button3_click1");
-  window1.loop();*/
+  window1.loop();
 }
 
 // Variable declarations 

@@ -50,33 +50,37 @@ void move()
   /*yside();
   xside();
   zside();*/
-  pickup();
+  Oldpickup();
   //drawRectangle();
 }
 
-void pickup()
+void IPpick(int x , int y)
 {
   Home();
   arm.openGripper();
   delay(mutualdelay);
-  arm.setCoordinate(50,50,70);
+  //arm.setAngle(0,12);
+  //delay(mutualdelay);
+  arm.setCoordinate(x-15,y-15,70);
   delay(mutualdelay);
-  arm.setCoordinate(50,50,10);
+  arm.setCoordinate(x-5,y-5,30);
+  delay(mutualdelay);
+  arm.setCoordinate(x,y,10);
   delay(mutualdelay+500);
-  arm.setGripper(30);
+  arm.setGripper(35);
   delay(mutualdelay+200);
-  arm.setCoordinate(50,50,70);
+  arm.setCoordinate(x,y,70);
   delay(mutualdelay+500);
   Home();
-  int ym = -10;
-  int xm = 90;
+  int ym = -5;
+  int xm = 80;
   arm.setCoordinate(xm-20,ym,90);
   delay(mutualdelay);
-  arm.setCoordinate(xm+5,ym,65);
+  arm.setCoordinate(xm+5,ym,75);
   delay(mutualdelay);
   arm.setCoordinate(xm,ym,50);
   delay(mutualdelay+500);
-  arm.setCoordinate(xm,ym,40);
+  arm.setCoordinate(xm,ym,20);
   delay(mutualdelay+500);
   arm.openGripper();
   delay(mutualdelay);
@@ -85,6 +89,53 @@ void pickup()
   Home();
   arm.closeGripper();
   //delay(mutualdelay);
+}
+
+void pickup()
+{
+  IPpick(50,50);
+}
+
+void Oldpickup()
+{
+  Home();
+  arm.openGripper();
+  delay(mutualdelay);
+  arm.setCoordinate(35,35,70);
+  delay(mutualdelay);
+  arm.setCoordinate(35,35,70);
+  delay(mutualdelay);
+  arm.setCoordinate(50,50,20);
+  delay(mutualdelay+500);
+  arm.setGripper(30);
+  delay(mutualdelay+200);
+  arm.setCoordinate(50,50,70);
+  delay(mutualdelay+500);
+  Home();
+  int ym = -5;
+  int xm = 80;
+  arm.setCoordinate(xm-20,ym,90);
+  delay(mutualdelay);
+  arm.setCoordinate(xm+5,ym,75);
+  delay(mutualdelay);
+  arm.setCoordinate(xm,ym,50);
+  delay(mutualdelay+500);
+  arm.setCoordinate(xm,ym,25);
+  delay(mutualdelay+500);
+  arm.openGripper();
+  delay(mutualdelay);
+  arm.setCoordinate(xm,ym,90);
+  delay(mutualdelay);
+  Home();
+  arm.closeGripper();
+  //delay(mutualdelay);
+}
+
+void demonstration()
+{
+  float [] f = {0.0,160.0,120.0};
+  arm.setAngles(f);
+  //f[0] = 
 }
 
 public int mutualdelay = 1000;

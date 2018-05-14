@@ -96,6 +96,14 @@ class Arm
         delay(10);
     }
 
+    void restPos()
+    {
+      write(0,90);
+      write(1,50);
+      write(2,75);
+      write(3,35);
+    }
+
     void test()
     {
         writeAll(0);

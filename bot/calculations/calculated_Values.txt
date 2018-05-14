@@ -10,7 +10,8 @@ z = z
 BE = sqrt(x**2 + y**2 + z**2)
 ce = sqrt(x**2 + y**2 + (s1 - z)**2)
 alpha = acos((s1**2 - z**2 + (s1 - z)**2)/(2*s1*sqrt(x**2 + y**2 + (s1 - z)**2)))
-beta = acos((s2**2 - s3**2 + x**2 + y**2 + (s1 - z)**2)/(2*s2*sqrt(x**2 + y**2 + (s1 - z)**2)))
+beta = acos((s2**2 - s3**2 + x**2 + y**2 + (s1 - z)**2)/(2*s2*sqrt(x**2 + y**2 + (s1 - z)**2)))\
+
 theta0 = atan(y/x)
 theta1 = acos((s1**2 - z**2 + (s1 - z)**2)/(2*s1*sqrt(x**2 + y**2 + (s1 - z)**2))) + 
 		 acos((s2**2 - s3**2 + x**2 + y**2 + (s1 - z)**2)/(2*s2*sqrt(x**2 + y**2 + (s1 - z)**2)))
