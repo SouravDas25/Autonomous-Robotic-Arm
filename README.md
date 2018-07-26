@@ -13,3 +13,6 @@ Autonomous Robotic Arm With Image Processing + Deep Neural Network and Arduino.
 
 
 [![Watch the video](https://img.youtube.com/vi/jhQWLCtkUKM/0.jpg)](https://www.youtube.com/watch?v=jhQWLCtkUKM)
+
+[Watch the video](https://www.youtube.com/watch?v=jhQWLCtkUKM)
+
